@@ -1,0 +1,18 @@
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/": "pages/index.js",
+  "/api/products": "pages/api/products.js",
+  "/api/partners": "pages/api/partners.js",
+  "/api/orders": "pages/api/orders.js",
+  "/api/testimonials": "pages/api/testimonials.js",
+  "/about": "pages/about.js",
+  "/mapping": "pages/mapping.js",
+  "/api/articles": "pages/api/articles.js",
+  "/article": "pages/article.js",
+  "/plantation": "pages/plantation.js",
+  "/album": "pages/album.js",
+  "/contact": "pages/contact.js",
+  "/donation": "pages/donation.js"
+}
