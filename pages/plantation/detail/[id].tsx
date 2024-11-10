@@ -5,7 +5,7 @@ import { FormatDate } from '@/modules/utils/formatDate'
 import useSWR from 'swr'
 
 export const getStaticPaths = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_HOST}/pesan_tanams`)
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_HOST}/api/orders`)
     const dataPesanTanams = await res.json()
 
     const paths = dataPesanTanams.map((dataPesantanam: DataPesanTanam) => ({
@@ -22,8 +22,8 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = (async (context:any) => {
     const { id } = context.params
-    const resDataPesanTanam = await fetch(`${process.env.NEXT_PUBLIC_SERVER_HOST}/pesan_tanams/${id}`)
-    const resTimeline = await fetch(`${process.env.NEXT_PUBLIC_SERVER_HOST}/timelines/${id}`)
+    const resDataPesanTanam = await fetch(`${process.env.NEXT_PUBLIC_SERVER_HOST}/api/orders/${id}`)
+    const resTimeline = await fetch(`${process.env.NEXT_PUBLIC_SERVER_HOST}/api/timelines/?idpt=${id}`)
     const dataPesanTanam = await resDataPesanTanam.json()
     const dataTimeline = await resTimeline.json()
     return {

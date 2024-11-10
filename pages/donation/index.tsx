@@ -30,17 +30,10 @@ export default function Donation() {
         { value: 'pemeliharaanCarbon', label: 'Pemeliharaan Carbon' },
     ];
 
-    const handleInputChange = (key, value) => {
+    const handleInputChange = (key:any, value:any) => {
         setFormData((prevData) => ({ ...prevData, [key]: value }));
     };
 
-    useEffect(() => {
-        const script = document.createElement('script');
-        script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
-        script.setAttribute('data-client-key', process.env.NEXT_PUBLIC_CLIENT_KEY);
-        document.body.appendChild(script);
-        return () => document.body.removeChild(script);
-    }, []);
 
     const handleWeb3Order = async () => {
         if (!window.ethereum) {
@@ -135,27 +128,6 @@ export default function Donation() {
         }
     };
 
-    const handleSubmitForm = async (e) => {
-        e.preventDefault();
-
-        try {
-            const response = await axios.post('https://app.sandbox.midtrans.com/snap/v1/transactions', {
-                transaction_details: { order_id: `order-${Date.now()}`, gross_amount: formData.jumlahPembayaran },
-                customer_details: { first_name: formData.nama, email: formData.email, phone: formData.phone },
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                    Authorization: `Basic ${Buffer.from(process.env.NEXT_PUBLIC_MIDTRANS_SERVER_KEY).toString('base64')}`,
-                },
-            });
-
-            setSnapToken(response.data.token);
-        } catch (error) {
-            console.error('Midtrans error:', error);
-        }
-    };
-
     return (
         <>
             <Header isHomePage={false} />
@@ -169,7 +141,7 @@ export default function Donation() {
                                     <h4 className="font-weight-bolder mb-0">Form Order</h4>
                                 </div>
                                 <div className="card-body">
-                                    <form onSubmit={handleSubmitForm}>
+                                    <form>
                                         <TextInput
                                             id="nama"
                                             label="Nama pemesan"
@@ -210,7 +182,7 @@ export default function Donation() {
                                             id="jumlahItem"
                                             label="Jumlah bibit dipesan"
                                             placeholder="Jumlah bibit dipesan"
-                                            value={formData.jumlahItem}
+                                            value={formData.jumlahItem.toString()}
                                             onChange={(value) => handleInputChange('jumlahItem', parseInt(value))}
                                             type="number"
                                         />
