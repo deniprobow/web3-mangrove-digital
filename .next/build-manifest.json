@@ -5,8 +5,8 @@
   "devFiles": [],
   "ampDevFiles": [],
   "lowPriorityFiles": [
-    "static/9MDFIhH4hu9EnOG0XoRI-/_buildManifest.js",
-    "static/9MDFIhH4hu9EnOG0XoRI-/_ssgManifest.js"
+    "static/L1wVnIWAESHgZlzXQdrtl/_buildManifest.js",
+    "static/L1wVnIWAESHgZlzXQdrtl/_ssgManifest.js"
   ],
   "rootMainFiles": [],
   "pages": {
@@ -100,7 +100,7 @@
       "static/chunks/webpack-ee7e63bc15b31913.js",
       "static/chunks/framework-63157d71ad419e09.js",
       "static/chunks/main-f221dfedae348475.js",
-      "static/chunks/pages/plantation/detail/[id]-c46353a2dc837a14.js"
+      "static/chunks/pages/plantation/detail/[id]-b95cf18e3a7fc47f.js"
     ],
     "/privacy-policy": [
       "static/chunks/webpack-ee7e63bc15b31913.js",

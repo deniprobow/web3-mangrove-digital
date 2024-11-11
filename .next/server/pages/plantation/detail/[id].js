@@ -132,8 +132,7 @@ __webpack_require__.r(__webpack_exports__);
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
   "default": () => (/* binding */ DetailPlantation),
-  getStaticPaths: () => (/* binding */ getStaticPaths),
-  getStaticProps: () => (/* binding */ getStaticProps)
+  getServerSideProps: () => (/* binding */ getServerSideProps)
 });
 
 // EXTERNAL MODULE: ./node_modules/react/jsx-runtime.js
@@ -158,51 +157,30 @@ const FormatDate = (value)=>{
 
 
 
-const getStaticPaths = async ()=>{
-    const res = await fetch(`${"http://localhost:3032"}/api/orders`);
-    // Log the response status and body
-    console.log("Response status:", res.status);
-    const text = await res.text(); // Read the response as text
-    console.log("Response body:", text);
-    // Attempt to parse the response as JSON
-    let dataPesanTanams;
+const getServerSideProps = async (context)=>{
+    const { id } = context.params;
     try {
-        dataPesanTanams = JSON.parse(text);
-    } catch (error) {
-        console.error("Failed to parse response as JSON:", error);
+        const resDataPesanTanam = await fetch(`${"http://localhost:3032"}/api/orders/${id}`);
+        const resTimeline = await fetch(`${"http://localhost:3032"}/api/timelines/?idpt=${id}`);
+        if (!resDataPesanTanam.ok || !resTimeline.ok) {
+            throw new Error("Failed to fetch data");
+        }
+        const dataPesanTanam = await resDataPesanTanam.json();
+        const dataTimeline = await resTimeline.json();
         return {
-            paths: [],
-            fallback: false
+            props: {
+                dataPesanTanam,
+                dataTimeline
+            }
+        };
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        return {
+            notFound: true
         };
     }
-    const paths = dataPesanTanams.map((dataPesantanam)=>({
-            params: {
-                id: `${dataPesantanam.id_pesan_tanam}`
-            }
-        }));
-    return {
-        paths,
-        fallback: false
-    };
 };
-const getStaticProps = async (context)=>{
-    const { id } = context.params;
-    const resDataPesanTanam = await fetch(`${"http://localhost:3032"}/api/orders/${id}`);
-    const resTimeline = await fetch(`${"http://localhost:3032"}/api/timelines/?idpt=${id}`);
-    const dataPesanTanam = await resDataPesanTanam.json();
-    const dataTimeline = await resTimeline.json();
-    return {
-        props: {
-            dataPesanTanam,
-            dataTimeline
-        },
-        revalidate: 60
-    };
-};
-function DetailPlantation({ ...props }) {
-    console.log(props);
-    const dataPesanTanam = props.dataPesanTanam;
-    const dataTimeline = props.dataTimeline;
+function DetailPlantation({ dataPesanTanam, dataTimeline }) {
     const breadcrumbLinks = [
         {
             name: "Home",
@@ -266,7 +244,7 @@ function DetailPlantation({ ...props }) {
                                                 /*#__PURE__*/ (0,jsx_runtime.jsxs)("li", {
                                                     children: [
                                                         /*#__PURE__*/ jsx_runtime.jsx("strong", {
-                                                            children: "Alamat Penamaman :"
+                                                            children: "Alamat Penanaman :"
                                                         }),
                                                         " ",
                                                         dataPesanTanam.lokasi_penanaman
@@ -293,12 +271,11 @@ function DetailPlantation({ ...props }) {
                                 children: [
                                     /*#__PURE__*/ jsx_runtime.jsx("h3", {
                                         className: "mb-4",
-                                        children: "Progress Penamaman Bibit"
+                                        children: "Progress Penanaman Bibit"
                                     }),
                                     /*#__PURE__*/ jsx_runtime.jsx("ul", {
                                         className: "timeline-progress",
-                                        children: dataTimeline.map((item, index)=>{
-                                            return /*#__PURE__*/ (0,jsx_runtime.jsxs)("li", {
+                                        children: dataTimeline.map((item, index)=>/*#__PURE__*/ (0,jsx_runtime.jsxs)("li", {
                                                 children: [
                                                     /*#__PURE__*/ jsx_runtime.jsx("span", {
                                                         className: "label label__main progress--date",
@@ -312,8 +289,7 @@ function DetailPlantation({ ...props }) {
                                                         children: item.keterangan_timeline_pesan_tanam
                                                     })
                                                 ]
-                                            }, index);
-                                        })
+                                            }, index))
                                     })
                                 ]
                             })
