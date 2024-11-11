@@ -160,7 +160,21 @@ const FormatDate = (value)=>{
 
 const getStaticPaths = async ()=>{
     const res = await fetch(`${"http://localhost:3032"}/api/orders`);
-    const dataPesanTanams = await res.json();
+    // Log the response status and body
+    console.log("Response status:", res.status);
+    const text = await res.text(); // Read the response as text
+    console.log("Response body:", text);
+    // Attempt to parse the response as JSON
+    let dataPesanTanams;
+    try {
+        dataPesanTanams = JSON.parse(text);
+    } catch (error) {
+        console.error("Failed to parse response as JSON:", error);
+        return {
+            paths: [],
+            fallback: false
+        };
+    }
     const paths = dataPesanTanams.map((dataPesantanam)=>({
             params: {
                 id: `${dataPesantanam.id_pesan_tanam}`

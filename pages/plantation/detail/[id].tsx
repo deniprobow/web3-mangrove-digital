@@ -5,20 +5,36 @@ import { FormatDate } from '@/modules/utils/formatDate'
 import useSWR from 'swr'
 
 export const getStaticPaths = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_HOST}/api/orders`)
-    const dataPesanTanams = await res.json()
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_HOST}/api/orders`);
+    
+    // Log the response status and body
+    console.log('Response status:', res.status);
+    const text = await res.text(); // Read the response as text
+    console.log('Response body:', text);
+
+    // Attempt to parse the response as JSON
+    let dataPesanTanams;
+    try {
+        dataPesanTanams = JSON.parse(text);
+    } catch (error) {
+        console.error('Failed to parse response as JSON:', error);
+        return {
+            paths: [],
+            fallback: false
+        };
+    }
 
     const paths = dataPesanTanams.map((dataPesantanam: DataPesanTanam) => ({
         params: {
             id: `${dataPesantanam.id_pesan_tanam}`
         }
-    }))
+    }));
 
     return {
         paths,
         fallback: false
-    }
-}
+    };
+};
 
 export const getStaticProps = (async (context:any) => {
     const { id } = context.params
